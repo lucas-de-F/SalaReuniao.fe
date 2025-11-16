@@ -6,11 +6,13 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 interface Props {
   page: number;
   totalPages: number;
+totalItems: number;
   onChange: (page: number) => void;
 }
 
-export default function PaginationControl({ page, totalPages, onChange }: Props) {
+export default function PaginationControl({ page, totalPages,  totalItems,onChange }: Props) {
   return (
+    <div className="flex justify-between">
     <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
       <IconButton disabled={page === 1} onClick={() => onChange(page - 1)}>
         <ArrowBackIcon />
@@ -23,6 +25,11 @@ export default function PaginationControl({ page, totalPages, onChange }: Props)
       <IconButton disabled={page === totalPages} onClick={() => onChange(page + 1)}>
         <ArrowForwardIcon />
       </IconButton>
+   
     </Box>
+       <Typography>
+        Total de itens: {totalItems}
+      </Typography>
+    </div>
   );
 }

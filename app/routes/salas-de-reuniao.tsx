@@ -31,7 +31,8 @@ export default function SalasDeReuniao() {
 
   const totalPages = Math.ceil(pageInfo.totalItems / pageInfo.pageSize);
   useEffect(() => {
-    salasService.getSalas(pageInfo.page, pageInfo.pageSize, filters).then((resp) => {
+    console.log("Filters changed:", filters);
+    salasService.getSalas(pageInfo.page, pageInfo.pageSize, filters as any).then((resp) => {
       setSalas(resp.items);
       setPageInfo({
         totalItems: resp.totalItems,
@@ -58,16 +59,15 @@ export default function SalasDeReuniao() {
       />
 
       <Box sx={{ flex: 1, p: 3 }}>
-        {/* PAGINAÇÃO ACIMA DOS CARDS */}
         <PaginationControl
           page={pageInfo.page}
           totalPages={totalPages}
+          totalItems={pageInfo.totalItems}
           onChange={(newPage) =>
             setPageInfo((prev) => ({ ...prev, page: newPage }))
           }
         />
 
-        {/* LISTA DE SALAS */}
         <SalasCards salas={salas} />
       </Box>
     </Box>

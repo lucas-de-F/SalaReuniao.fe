@@ -41,13 +41,26 @@ interface SalaResponse {
 }
 
 export const salasService = {
-  async getSalas(page: number, pageSize: number, filters: any): Promise<SalaResponse> {
+  async getSalas(page: number, pageSize: number, filters: SalasFilter): Promise<SalaResponse> {
     const { data } = await api.get("/SalaDeReuniao", {
       params: {
         page,
         pageSize,
         ...filters,
       },
+      paramsSerializer: {
+        serialize: (params) => {
+          const searchParams = new URLSearchParams();
+          Object.entries(params).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+              value.forEach((v) => searchParams.append(key, v));
+            } else if (value !== undefined && value !== null) {
+              searchParams.append(key, String(value));
+            }
+          });
+          return searchParams.toString();
+        }
+      }
     });
     return data;
   }
