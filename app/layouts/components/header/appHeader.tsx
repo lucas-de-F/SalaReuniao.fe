@@ -24,7 +24,7 @@ export default function AppHeaderBar() {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
+      <Container maxWidth={false}>
         <Toolbar disableGutters>
           <MobileMenu pages={pages} onLogout={handleLogout} />
           <DesktopMenu pages={pages} onNavigate={(p: any) => navigate(p)} />

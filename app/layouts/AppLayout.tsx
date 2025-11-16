@@ -4,9 +4,9 @@ import { Container } from "@mui/material";
 
 export default function AppLayout() {
   return (
-    <div>
+    <div className="w-full h-full">
       <AppHeaderBar />
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Container  maxWidth={false} className="w-full h-full">
         <Outlet />
       </Container>
     </div>

@@ -2,6 +2,7 @@
 import { Outlet, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import { jwtService } from "~/services/jwtService";
 
 type JwtPayload = {
   exp?: number;
@@ -13,37 +14,12 @@ export default function ProtectedLayout() {
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("key");
-
-    if (!token) {
+    if (!jwtService.isValid()) {
       navigate("/", { replace: true });
       return;
     }
 
-    try {
-      const decoded = jwtDecode<JwtPayload>(token);
-
-      // valida expiração
-      if (!decoded.exp || decoded.exp * 1000 < Date.now()) {
-        console.warn("JWT expirado");
-        localStorage.removeItem("key");
-        navigate("/", { replace: true });
-        return;
-      }
-
-      // (opcional) checar se tem o claim userId
-      if (!decoded.userId) {
-        console.warn("JWT inválido: sem userId");
-        navigate("/", { replace: true });
-        return;
-      }
-
-      setChecking(false);
-    } catch (err) {
-      console.error("Token inválido", err);
-      localStorage.removeItem("key");
-      navigate("/", { replace: true });
-    }
+    setChecking(false);
   }, [navigate]);
 
   if (checking) return <div />;

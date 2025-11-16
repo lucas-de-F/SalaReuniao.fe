@@ -1,15 +1,13 @@
 import { Outlet, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
+import { jwtService } from "~/services/jwtService";
 
 export default function NoAuthLayout() {
   const navigate = useNavigate();
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    const key = localStorage.getItem("key");
-
-    // Se já estiver logado → manda para salas
-    if (key) {
+    if (jwtService.isValid()) {
       navigate("/salas-de-reuniao", { replace: true });
       return;
     }
