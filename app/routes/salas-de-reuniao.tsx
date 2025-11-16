@@ -9,6 +9,7 @@ import PaginationControl from "./components/SalasDeReuniao/PaginationControl";
 
 import { salasService, type Sala } from "~/services/salasService";
 import SalasCards from "./components/SalasDeReuniao/SalasList";
+import { useNavigate } from "react-router";
 
 export interface SalasFilter {
   data?: string;
@@ -19,6 +20,7 @@ export interface SalasFilter {
   municipio?: string[];
 }
 export default function SalasDeReuniao() {
+  const navigate = useNavigate();
   const [openFilters, setOpenFilters] = useState(false);
   const [filters, setFilters] = useState<SalasFilter>({});
   const [salas, setSalas] = useState<Sala[]>([]);
@@ -68,7 +70,11 @@ export default function SalasDeReuniao() {
           }
         />
 
-        <SalasCards salas={salas} />
+        <SalasCards salas={salas} tipo="disponibilidade" onVerDisponibilidade={(sala) => {
+          // Lógica para ver disponibilidade da sala
+          console.log("Ver disponibilidade da sala:", sala);
+          navigate(`/reservar-sala/${sala.id}`);
+        }} />
       </Box>
     </Box>
   );

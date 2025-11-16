@@ -9,7 +9,6 @@ import LogoutButton from "./LogoutButton";
 
 export const pages = [
   { name: "Salas de Reunião", link: "/salas-de-reuniao" },
-  { name: "Reservar Sala", link: "/reservar-sala" },
   { name: "Minhas Reservas", link: "/minhas-reservas" },
   { name: "Minhas Salas", link: "/minhas-salas" },
 ];

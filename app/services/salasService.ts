@@ -1,4 +1,3 @@
-// services/salasService.ts
 import api from "./api";
 
 export interface Endereco {
@@ -40,6 +39,26 @@ interface SalaResponse {
   pageSize: number;
 }
 
+export interface ReuniaoAgendada {
+  id: string;
+  idSalaReuniao: string;
+  inicio: string; // "HH:mm:ss"
+  fim: string;    // "HH:mm:ss"
+  data: string;   // "YYYY-MM-DD"
+  status: string; // "Agendada", etc
+}
+
+// Disponibilidades
+export interface Disponibilidade {
+  diaSemana: string; // "Monday", "Tuesday", etc
+  inicio: string;    // "HH:mm:ss"
+  fim: string;       // "HH:mm:ss"
+}
+// Interface detalhada da sala
+export interface SalaDetalhada extends Sala {
+  disponibilidades: Disponibilidade[];
+  reunioesAgendadas: ReuniaoAgendada[];
+}
 export const salasService = {
   async getSalas(page: number, pageSize: number, filters: SalasFilter): Promise<SalaResponse> {
     const { data } = await api.get("/SalaDeReuniao", {
@@ -62,6 +81,10 @@ export const salasService = {
         }
       }
     });
+    return data;
+  },
+  async getSalaById(id: string): Promise<SalaDetalhada> {
+    const { data } = await api.get(`/SalaDeReuniao/${id}`);
     return data;
   }
 };
