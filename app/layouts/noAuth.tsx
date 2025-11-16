@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { jwtService } from "~/services/jwtService";
+import { ToastContainer } from "react-toastify";
 
 export default function NoAuthLayout() {
   const navigate = useNavigate();
@@ -29,6 +30,8 @@ export default function NoAuthLayout() {
       }}
     >
       <Outlet />
+          <ToastContainer position="top-right" autoClose={3000} /> {/* ← aqui */}
+
     </div>
   );
 }

@@ -1,32 +1,68 @@
 import { useEffect, useState } from "react";
-import { Box, TextField, Button, Typography, Grid, Paper } from "@mui/material";
+import { Box, TextField, Button, Typography, Grid, Paper, Snackbar } from "@mui/material";
 import CalendarioSala from "./components/reservarSala/CalendarioSala";
 import { useParams } from "react-router";
 import { salasService } from "~/services/salasService";
+import { toast } from "react-toastify";
+import type { Dayjs } from "dayjs";
 
 export default function ReservarSala() {
     const { id } = useParams();
 
   const [horaInicio, setHoraInicio] = useState("");
   const [horaFim, setHoraFim] = useState("");
+const [diaSelecionado, setDiaSelecionado] = useState<Dayjs | null>(null);
 
   const [sala, setSala] = useState<any>(null);
   // pegar id do parametro da rota
-  const handleReservar = () => {
-    alert(`Reserva feita: Início ${horaInicio}, Fim ${horaFim}`);
+  const handleReservar = async () => {
+    if (!diaSelecionado) {
+      toast.error("Selecione uma data antes de reservar!");
+      return;
+    }
+    if (!horaInicio || !horaFim) {
+      toast.error("Selecione o horário de início e fim!");
+      return;
+    }
+
+    if (Number(horaInicio.split(":")[0]) >= Number(horaFim.split(":")[0])) {
+      toast.error("O horário de início deve ser antes do horário de fim!");
+      return;
+    }
+    
+try {
+  await salasService.realizarReserva(
+    id as string, 
+    diaSelecionado!.format("YYYY-MM-DD"), 
+    horaInicio, 
+    horaFim
+  );
+  toast.success("Reserva realizada com sucesso!");
+  obterSalaDetalhada(id as string);
+} catch (error: any) {
+  // Se for axios
+  const msg =
+    error.response?.data?.message || "Erro ao realizar a reserva.";
+  toast.error(msg);
+  console.error(error);
+}
   };
   
-  useEffect(() => {
-    console.log("ID da sala para reserva:", id);
+  const obterSalaDetalhada = (id: string) => {
     salasService.getSalaById(id as string).then((data) => {
       setSala(data);
-    });
+    });  
+  }
+
+  useEffect(() => {
+    console.log("ID da sala para reserva:", id);
+    obterSalaDetalhada(id as string);
   }, []);
   return (
     <Box display="flex" height="100%">
       {/* Lado esquerdo - 2/3 */}
       <Box flex={2} p={4} >
-        <CalendarioSala sala={sala} />
+        <CalendarioSala sala={sala} onSelectDia={setDiaSelecionado} />
       </Box>
 
       {/* Lado direito - 1/3 */}

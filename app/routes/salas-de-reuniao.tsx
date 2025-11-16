@@ -71,8 +71,6 @@ export default function SalasDeReuniao() {
         />
 
         <SalasCards salas={salas} tipo="disponibilidade" onVerDisponibilidade={(sala) => {
-          // Lógica para ver disponibilidade da sala
-          console.log("Ver disponibilidade da sala:", sala);
           navigate(`/reservar-sala/${sala.id}`);
         }} />
       </Box>

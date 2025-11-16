@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { jwtService } from "~/services/jwtService";
+import { ToastContainer } from "react-toastify";
 
 type JwtPayload = {
   exp?: number;
@@ -24,5 +25,10 @@ export default function ProtectedLayout() {
 
   if (checking) return <div />;
 
-  return <Outlet />;
+  return (
+  <>
+    <Outlet />
+    <ToastContainer position="top-right" autoClose={2000} />
+  </>
+  );
 }

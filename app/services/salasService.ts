@@ -86,5 +86,14 @@ export const salasService = {
   async getSalaById(id: string): Promise<SalaDetalhada> {
     const { data } = await api.get(`/SalaDeReuniao/${id}`);
     return data;
+  },
+  async realizarReserva(idSala: string, data: string, horaInicio: string, horaFim: string): Promise<void> {
+    await api.post(`/Reservas/Reservar`, {
+      idSala,
+      data,
+      inicio: horaInicio,
+      fim: horaFim
+    });
   }
+
 };
