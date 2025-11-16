@@ -43,16 +43,35 @@ const hoje = dayjs(); // data mínima liberada (hoje)
   };
 
   // Gerar todos os dias do mês
-  const gerarDiasDoMes = () => {
-    const inicio = mesAtual.startOf("month");
-    const fim = mesAtual.endOf("month");
-    const dias = [];
-    for (let d = inicio; d.isBefore(fim) || d.isSame(fim, "day"); d = d.add(1, "day")) {
-      dias.push(d);
-    }
-    return dias;
-  };
+const gerarDiasDoMes = () => {
+  const inicio = mesAtual.startOf("month");
+  const fim = mesAtual.endOf("month");
 
+  const dias: Dayjs[] = [];
+
+  // Descobrir o índice do dia da semana do primeiro dia do mês (0 = Sunday)
+  const diaSemanaInicio = inicio.day();
+
+  // Dias do mês anterior para preencher o início
+  for (let i = diaSemanaInicio - 1; i >= 0; i--) {
+    dias.push(inicio.subtract(i + 1, "day"));
+  }
+
+  // Dias do mês atual
+  for (let d = inicio; d.isBefore(fim) || d.isSame(fim, "day"); d = d.add(1, "day")) {
+    dias.push(d);
+  }
+
+  // Preencher o restante da última semana com dias do próximo mês
+  const diasParaCompletarSemana = 7 - (dias.length % 7);
+  if (diasParaCompletarSemana < 7) {
+    for (let i = 0; i < diasParaCompletarSemana; i++) {
+      dias.push(fim.add(i + 1, "day"));
+    }
+  }
+
+  return dias;
+};
   const diasDoMes = gerarDiasDoMes();
 
   // Obter horários do dia selecionado
