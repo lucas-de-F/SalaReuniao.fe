@@ -94,6 +94,15 @@ export const salasService = {
       inicio: horaInicio,
       fim: horaFim
     });
+  },
+  async criar(data: any) {
+    const { data: created } = await api.post(`/SalaDeReuniao`, data);
+    return created;
+  },
+  async atualizar(id: string,  data: any) {
+    },
+  async remover(id: string): Promise<void> {
+    await api.delete(`/SalaDeReuniao/${id}`);
   }
 
 };

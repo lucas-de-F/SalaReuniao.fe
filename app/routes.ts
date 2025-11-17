@@ -9,8 +9,10 @@ export default [
     route("salas-de-reuniao", "routes/salas-de-reuniao.tsx"),
     route("reservar-sala/:id", "routes/reservar-sala.$id.tsx"),
     route("minhas-reservas", "routes/minhas-reservas.tsx"),
+    
     route("minhas-salas", "routes/minhas-salas.tsx"),
-    route("sala-de-reuniao/:id", "routes/sala-de-reuniao.$id.tsx"),
+    route("minhas-salas/editar/:id", "routes/sala-de-reuniao.$id.tsx"),
+    route("minhas-salas/criar", "routes/sala-de-reuniao-criar.tsx"),
     ]),
   ]),
 

@@ -1,10 +1,10 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, Paper, Stack, TextField, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { salasService } from "~/services/salasService";
 import type { Sala } from "./minhas-salas";
 import { jwtService } from "~/services/jwtService";
 import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 
 
 const diasSemana = [
@@ -42,7 +42,7 @@ const navigate = useNavigate();
   // abre modal de horário
   const handleOpenModal = (day: any) => {
     setSelectedDay(day);
-    const existing = form.disponibilidades?.find((d: any) => d.diaSemana === day.value);
+    const existing = form.disponibilidades.find((d: any) => d.diaSemana === day.value);
     setHorario(existing ? { inicio: existing.inicio, fim: existing.fim } : { inicio: "", fim: "" });
     setOpenModal(true);
   };
@@ -78,21 +78,9 @@ const criarSala = async () => {
     setLoading(false);
   }
 };
-const { id } = useParams();
-  const obterSalaDetalhada = (id: string) => {
-    salasService.getSalaById(id as string).then((data) => {
-      console.log(data)
-      setForm({...data, disponibilidades: data?.disponibilidades});
-
-    });
-  };
-
-useEffect(() => {
-    obterSalaDetalhada(id as string);
-  }, [id]);
   // salva horário do dia
   const handleSaveHorario = () => {
-    const filtrado = form.disponibilidades?.filter(
+    const filtrado = form.disponibilidades.filter(
       (d: any) => d.diaSemana !== selectedDay?.value
     );
 
@@ -147,7 +135,7 @@ useEffect(() => {
   return (
     <div style={{ padding: 24 }}>
       <Typography variant="h5" sx={{ mb: 3 }}>
-        Editar Sala de Reunião
+        Criar Sala de Reunião
       </Typography>
 
       <div className="grid grid-cols-4 gap-4">
@@ -252,7 +240,7 @@ useEffect(() => {
 
         <Grid container spacing={2}>
           {diasSemana.map((d) => {
-            const existing = form?.disponibilidades?.find((x: any) => x.diaSemana === d.value);
+            const existing = form.disponibilidades.find((x: any) => x.diaSemana === d.value);
             return (
               <Grid item xs={12} sm={20} md={3} lg={20} key={d.value}>
                 <Paper
@@ -286,7 +274,7 @@ useEffect(() => {
         size="large"
         disabled={loading}
       >
-        {loading ? "Salvando..." : "Salvar Sala"}
+        {loading ? "Criando..." : "Criar Sala"}
       </Button>
       </Box>
 
